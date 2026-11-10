@@ -22,7 +22,11 @@ select = ["E", "F", "I", "B", "UP"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-markers = ["race: concurrency tests that need a running stack"]
+addopts = "-m 'not integration and not race'"
+markers = [
+    "integration: HTTP tests against a running API",
+    "race: concurrency tests that need a running stack",
+]
 
 [dependency-groups]
 dev = [
