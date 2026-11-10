@@ -1,0 +1,77 @@
+                                                   Table "public.inventory"
+   Column   |           Type           | Collation | Nullable | Default | Storage  | Compression | Stats target | Description 
+------------+--------------------------+-----------+----------+---------+----------+-------------+--------------+-------------
+ sku        | text                     |           | not null |         | extended |             |              | 
+ available  | integer                  |           | not null |         | plain    |             |              | 
+ updated_at | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+Indexes:
+    "inventory_pkey" PRIMARY KEY, btree (sku)
+Check constraints:
+    "inventory_available_check" CHECK (available >= 0)
+Foreign-key constraints:
+    "inventory_sku_fkey" FOREIGN KEY (sku) REFERENCES products(sku)
+Access method: heap
+
+                                                       Table "public.orders"
+     Column      |           Type           | Collation | Nullable | Default | Storage  | Compression | Stats target | Description 
+-----------------+--------------------------+-----------+----------+---------+----------+-------------+--------------+-------------
+ order_id        | uuid                     |           | not null |         | plain    |             |              | 
+ idempotency_key | text                     |           | not null |         | extended |             |              | 
+ request_hash    | character(64)            |           | not null |         | extended |             |              | 
+ customer_id     | text                     |           | not null |         | extended |             |              | 
+ status          | text                     |           | not null |         | extended |             |              | 
+ total_cents     | integer                  |           | not null |         | plain    |             |              | 
+ created_at      | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+ updated_at      | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+ completed_at    | timestamp with time zone |           |          |         | plain    |             |              | 
+Indexes:
+    "orders_pkey" PRIMARY KEY, btree (order_id)
+    "orders_idempotency_key_unique" UNIQUE CONSTRAINT, btree (idempotency_key)
+Check constraints:
+    "orders_customer_id_check" CHECK (char_length(customer_id) >= 1 AND char_length(customer_id) <= 64)
+    "orders_status_check" CHECK (status = ANY (ARRAY['queued'::text, 'processing'::text, 'completed'::text, 'failed'::text]))
+    "orders_total_cents_check" CHECK (total_cents >= 0)
+Referenced by:
+    TABLE "jobs" CONSTRAINT "jobs_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    TABLE "order_items" CONSTRAINT "order_items_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    TABLE "receipts" CONSTRAINT "receipts_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+Access method: heap
+
+                                                        Table "public.jobs"
+     Column      |           Type           | Collation | Nullable | Default | Storage  | Compression | Stats target | Description 
+-----------------+--------------------------+-----------+----------+---------+----------+-------------+--------------+-------------
+ job_id          | uuid                     |           | not null |         | plain    |             |              | 
+ order_id        | uuid                     |           | not null |         | plain    |             |              | 
+ status          | text                     |           | not null |         | extended |             |              | 
+ attempts        | integer                  |           | not null | 0       | plain    |             |              | 
+ max_attempts    | integer                  |           | not null |         | plain    |             |              | 
+ next_attempt_at | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+ locked_by       | text                     |           |          |         | extended |             |              | 
+ locked_until    | timestamp with time zone |           |          |         | plain    |             |              | 
+ last_error      | text                     |           |          |         | extended |             |              | 
+ created_at      | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+ updated_at      | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+Indexes:
+    "jobs_pkey" PRIMARY KEY, btree (job_id)
+    "jobs_order_id_unique" UNIQUE CONSTRAINT, btree (order_id)
+    "jobs_status_next_attempt_idx" btree (status, next_attempt_at)
+Check constraints:
+    "jobs_attempts_check" CHECK (attempts >= 0)
+    "jobs_max_attempts_check" CHECK (max_attempts >= 1)
+    "jobs_status_check" CHECK (status = ANY (ARRAY['queued'::text, 'processing'::text, 'done'::text, 'dead'::text]))
+Foreign-key constraints:
+    "jobs_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+Access method: heap
+
+                                                    Table "public.receipts"
+    Column    |           Type           | Collation | Nullable | Default | Storage  | Compression | Stats target | Description 
+--------------+--------------------------+-----------+----------+---------+----------+-------------+--------------+-------------
+ order_id     | uuid                     |           | not null |         | plain    |             |              | 
+ completed_by | text                     |           | not null |         | extended |             |              | 
+ created_at   | timestamp with time zone |           | not null | now()   | plain    |             |              | 
+Indexes:
+    "receipts_pkey" PRIMARY KEY, btree (order_id)
+Foreign-key constraints:
+    "receipts_order_id_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+Access method: heap
+
