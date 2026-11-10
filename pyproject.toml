@@ -1,0 +1,32 @@
+[project]
+name = "fulfillops"
+version = "0.1.0"
+description = "FulfillOps - resilient order-processing platform (EPITA DevOps capstone)"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.162.3",
+    "prometheus-client>=0.26.0",
+    "psycopg[binary,pool]>=3.3.8",
+    "redis>=8.1.0",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["tests/contract", "scripts/fulfillops_rollout_probe.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["race: concurrency tests that need a running stack"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+]
