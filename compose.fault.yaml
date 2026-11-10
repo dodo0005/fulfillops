@@ -1,0 +1,9 @@
+# Drill-only override. NEVER use outside the lab.
+#   docker compose -f compose.yaml -f compose.fault.yaml up -d --build --wait
+# Slow processing gives time to kill a worker mid-job (E09); poison mode makes
+# customer_id "POISON-TEST" always fail (E10).
+services:
+  worker:
+    environment:
+      WORKER_PROCESSING_DELAY_SECONDS: "8"
+      POISON_TEST_MODE: "true"
