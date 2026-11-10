@@ -1,0 +1,12 @@
+===== 2026-11-10T19:20:28Z · person B =====
+OS: Linux 5.15.167.4-microsoft-standard-WSL2 x86_64
+PRETTY_NAME="Ubuntu 24.04.2 LTS"
+git --version                                 git version 2.43.0
+docker version --format {{.Server.Version}}   29.9.3
+docker compose version                        Docker Compose version v5.7.0
+kubectl version --client                      Client Version: v1.37.2
+kind version                                  kind v0.33.0 go1.26.7 linux/amd64
+python3 --version                             Python 3.12.3
+uv --version                                  uv 0.13.7 (x86_64-unknown-linux-gnu)
+docker run hello-world: OK
+

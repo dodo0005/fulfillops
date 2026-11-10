@@ -1,0 +1,7 @@
+# Deliberately naive baseline, used ONLY for the image-size comparison in E16.
+# Single stage, full python image, whole build context, pip, runs as root. Do not deploy this.
+FROM python:3.12
+WORKDIR /app
+COPY . .
+RUN pip install fastapi "uvicorn[standard]" "psycopg[binary,pool]" redis prometheus-client
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]

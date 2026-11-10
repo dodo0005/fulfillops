@@ -1,0 +1,17 @@
+.git
+.github
+.venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+reports
+tests
+docs
+infra
+scripts
+.env
+.env.*
+*.md
+compose*.yaml
+Dockerfile*
