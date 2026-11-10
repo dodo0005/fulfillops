@@ -1,0 +1,109 @@
+# FulfillOps local stack.  Up: docker compose up -d --build   Down (keeps data): docker compose down
+# Names follow section 3 of docs/team-guide.md. Do not rename services.
+name: fulfillops
+
+x-app-env: &app-env
+  DATABASE_URL: postgresql://fulfillops:${POSTGRES_PASSWORD:?copy .env.example to .env}@db:5432/${POSTGRES_DB:-fulfillops_test}
+  REDIS_URL: redis://redis:6379/0
+  QUEUE_BACKEND: ${QUEUE_BACKEND:-postgres}
+  APP_ENV: ${APP_ENV:-test}
+  API_PORT: "8080"
+  MAX_BODY_BYTES: "16384"
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+  WORKER_MAX_ATTEMPTS: "5"
+  WORKER_LEASE_SECONDS: "20"
+  WORKER_POLL_INTERVAL_SECONDS: "2"
+  WORKER_PROCESSING_DELAY_SECONDS: "0.5"
+  WORKER_BACKOFF_BASE_SECONDS: "1"
+  WORKER_BACKOFF_MAX_SECONDS: "30"
+  WORKER_METRICS_PORT: "9100"
+  POISON_TEST_MODE: "false"
+
+# Runtime hardening for every container built from our image.
+x-app: &app
+  build: .
+  image: fulfillops:dev
+  environment: *app-env
+  read_only: true
+  tmpfs: [/tmp]
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+
+x-app-deps: &app-deps
+  db:
+    condition: service_healthy
+  redis:
+    condition: service_healthy
+  migrate:
+    condition: service_completed_successfully
+
+x-api-health: &api-health
+  test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health/ready', timeout=2)"]
+  interval: 5s
+  timeout: 3s
+  retries: 12
+  start_period: 10s
+
+services:
+  db:
+    image: postgres:16.15-alpine
+    environment:
+      POSTGRES_USER: fulfillops
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?copy .env.example to .env}
+      POSTGRES_DB: ${POSTGRES_DB:-fulfillops_test}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fulfillops -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.4.12-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    <<: *app
+    command: ["python", "-m", "common.migrate"]
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  api:
+    <<: *app
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
+    ports: ["8080:8080"]
+    depends_on: *app-deps
+    healthcheck: *api-health
+    restart: unless-stopped
+
+  # Second API instance: needed for the cross-replica same-key race (E05).
+  api2:
+    <<: *app
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
+    ports: ["8081:8080"]
+    depends_on: *app-deps
+    healthcheck: *api-health
+    restart: unless-stopped
+
+  worker:
+    <<: *app
+    command: ["python", "-m", "worker.main"]
+    deploy:
+      replicas: 2
+    stop_grace_period: 30s   # SIGTERM -> finish current job -> exit
+    depends_on: *app-deps
+    restart: unless-stopped
+    # TODO(after A12 merges): add a healthcheck on http://localhost:9100/metrics.
+    # Adding it before the worker serves metrics would make `up --wait` fail in CI.
+
+volumes:
+  pgdata:
