@@ -7,6 +7,11 @@ import uuid
 from psycopg_pool import ConnectionPool
 
 
+def fetch_known_skus(pool: ConnectionPool) -> set[str]:
+    with pool.connection() as conn:
+        return {row[0] for row in conn.execute("SELECT sku FROM products").fetchall()}
+
+
 def fetch_order(pool: ConnectionPool, order_id: str) -> dict | None:
     """Return {"order_id", "status", "total_cents"} or None if unknown.
 
