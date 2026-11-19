@@ -7,7 +7,7 @@ from starlette.concurrency import run_in_threadpool
 
 from api.errors import ApiError
 from api.middleware import limit_body_size
-from api.orders_service import fetch_known_skus, fetch_order
+from api.orders_service import accept_order, fetch_known_skus, fetch_order
 from api.validation import check_known_skus, parse_order_request, validate_idempotency_key
 
 router = APIRouter(prefix="/api/v1")
@@ -24,9 +24,11 @@ async def create_order(request: Request) -> dict:
     known = await run_in_threadpool(fetch_known_skus, pool)
     check_known_skus(order, known)  # step 6
 
-    # Task A5 replaces this line with the atomic reservation (accept_order).
-    del key
-    raise ApiError(501, "NOT_IMPLEMENTED", "Order creation is not implemented yet")
+    # Step 7 + idempotency, in one transaction (blocking DB call -> thread pool).
+    result = await run_in_threadpool(accept_order, pool, key, order, settings.worker_max_attempts)
+    # Task A9 adds: publish order_id to Redis here (after commit, failures ignored).
+    # A replay always answers "queued": it is an acceptance receipt, not the live status.
+    return {"order_id": result.order_id, "status": "queued"}
 
 
 @router.get("/orders/{order_id}")

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Safe test-only reset (Compose). common.reset_test_data refuses unless
-# APP_ENV=test AND the database name contains "test".
+# Reset the isolated TEST dataset (no orders, seed stock). Refuses non-test databases.
+# Local:   scripts/reset-test-data.sh
+# Compose: docker compose exec api python -m common.reset_test_data
 set -euo pipefail
-cd "$(git rev-parse --show-toplevel)"
-docker compose exec -T api python -m common.reset_test_data
+cd "$(dirname "$0")/.."
+exec uv run python -m common.reset_test_data
