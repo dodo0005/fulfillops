@@ -90,7 +90,7 @@ jobs:
       - name: Reset test data (tests above consume stock)
         run: |
           if [ -f common/reset_test_data.py ]; then
-            ./scripts/reset-test-data.sh
+            docker compose exec -T api python -m common.reset_test_data
           else
             echo "::warning::common/reset_test_data.py not merged yet; checker runs on whatever stock is left"
           fi
