@@ -28,6 +28,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app \
     PATH=/opt/venv/bin:$PATH
+# Pull in Debian security patches published after the base image (e.g. CVE-2026-85091, zlib).
+RUN apt-get update \
+ && apt-get upgrade -y --no-install-recommends \
+ && rm -rf /var/lib/apt/lists/*
 # Fixed UID/GID 10001 so Kubernetes runAsUser and Compose agree with the image.
 RUN groupadd --system --gid 10001 app \
  && useradd --system --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin app

@@ -85,7 +85,7 @@ jobs:
           if [ -z "$paths" ]; then
             echo "::warning::no tests/integration or tests/race yet"
           else
-            uv run pytest $paths -v --junitxml=reports/integration.xml
+            uv run pytest $paths -m "integration or race" -v --junitxml=reports/integration.xml
           fi
       - name: Reset test data (tests above consume stock)
         run: |
