@@ -1,0 +1,318 @@
+=================== PHASE: before ===================
+# date:    2026-11-20T18:14:10Z
+# commit:  93507bd38f42f7c106146c2edc3561ec757c4bae
+# command: scripts/broken-rollout.sh before
+# mode:    kind
+
+origin/main: 751f5c059b9cbc4d69382e46ebe9e1d1107054c0  Merge pull request #21 from dodo0005/b/rollout-6
+--- argo
+Synced / Healthy  rev=751f5c059b9cbc4d69382e46ebe9e1d1107054c0
+--- rollout status (5 s timeout)
+deployment "fulfillops-api" successfully rolled out
+--- deployment conditions
+Available=True  MinimumReplicasAvailable  Deployment has minimum availability.
+Progressing=True  NewReplicaSetAvailable  ReplicaSet "fulfillops-api-6c9f776fcd" has successfully progressed.
+--- replicasets / pods
+NAME                                        DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-65b555b4bf   0         0         0       26m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=65b555b4bf
+replicaset.apps/fulfillops-api-6c668869dc   0         0         0       3h7m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c668869dc
+replicaset.apps/fulfillops-api-6c9f776fcd   2         2         2       22m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c9f776fcd
+replicaset.apps/fulfillops-api-74d6bdcdd8   0         0         0       35m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=74d6bdcdd8
+replicaset.apps/fulfillops-api-7b74bb9987   0         0         0       75m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=7b74bb9987
+replicaset.apps/fulfillops-api-cbdf8c778    0         0         0       108m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=cbdf8c778
+
+NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c9f776fcd-bl7fr   1/1     Running   0          22m   10.244.0.33   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c9f776fcd-jb7kp   1/1     Running   0          22m   10.244.0.34   fulfillops-control-plane   <none>           <none>
+--- rollout history
+deployment.apps/fulfillops-api 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+4         <none>
+5         <none>
+6         <none>
+
+--- recent events
+22m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-bl7fr    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+22m         Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled up replica set fulfillops-api-6c9f776fcd from 0 to 1
+22m         Normal    SuccessfulCreate    replicaset/fulfillops-api-6c9f776fcd   Created pod: fulfillops-api-6c9f776fcd-bl7fr
+22m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-bl7fr    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+22m         Normal    Created             pod/fulfillops-api-6c9f776fcd-bl7fr    Container created
+22m         Normal    Started             pod/fulfillops-api-6c9f776fcd-bl7fr    Container started
+22m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-bl7fr    Readiness probe failed: Get "http://10.244.0.33:8080/health/ready": dial tcp 10.244.0.33:8080: connect: connection refused
+22m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+22m         Normal    Killing             pod/fulfillops-api-65b555b4bf-th4pc    Stopping container api
+22m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-th4pc
+22m         Normal    SuccessfulCreate    replicaset/fulfillops-api-6c9f776fcd   Created pod: fulfillops-api-6c9f776fcd-jb7kp
+22m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+22m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+22m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+22m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+22m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+22m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-jb7kp    Readiness probe failed: Get "http://10.244.0.34:8080/health/ready": dial tcp 10.244.0.34:8080: connect: connection refused
+22m         Normal    Killing             pod/fulfillops-api-65b555b4bf-6sv5j    Stopping container api
+22m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-6sv5j
+22m         Normal    ScalingReplicaSet   deployment/fulfillops-api              (combined from similar events): Scaled down replica set fulfillops-api-65b555b4bf from 1 to 0
+--- committed orders (must not drop)
+completed|1
+--- user view
+GET /health/ready -> 200
+
+=================== PHASE: during ===================
+# date:    2026-11-20T18:21:29Z
+# commit:  9994d68605676d2d14650fc147e36c0277ead77a
+# command: scripts/broken-rollout.sh during
+# mode:    kind
+
+origin/main: f24ed77b55415b9a6b24cdda7acef41457395c47  Merge pull request #23 from dodo0005/b/break-readiness
+--- argo
+Synced / Progressing  rev=f24ed77b55415b9a6b24cdda7acef41457395c47
+--- rollout status (5 s timeout)
+Waiting for deployment "fulfillops-api" rollout to finish: 1 out of 2 new replicas have been updated...
+error: timed out waiting for the condition
+--- deployment conditions
+Available=True  MinimumReplicasAvailable  Deployment has minimum availability.
+Progressing=True  ReplicaSetUpdated  ReplicaSet "fulfillops-api-6f885676c4" is progressing.
+--- replicasets / pods
+NAME                                        DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-65b555b4bf   0         0         0       34m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=65b555b4bf
+replicaset.apps/fulfillops-api-6c668869dc   0         0         0       3h14m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c668869dc
+replicaset.apps/fulfillops-api-6c9f776fcd   2         2         2       30m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c9f776fcd
+replicaset.apps/fulfillops-api-6f885676c4   1         1         0       51s     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6f885676c4
+replicaset.apps/fulfillops-api-74d6bdcdd8   0         0         0       43m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=74d6bdcdd8
+replicaset.apps/fulfillops-api-7b74bb9987   0         0         0       83m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=7b74bb9987
+replicaset.apps/fulfillops-api-cbdf8c778    0         0         0       116m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=cbdf8c778
+
+NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c9f776fcd-bl7fr   1/1     Running   0          30m   10.244.0.33   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c9f776fcd-jb7kp   1/1     Running   0          30m   10.244.0.34   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6f885676c4-vntkk   0/1     Running   0          51s   10.244.0.35   fulfillops-control-plane   <none>           <none>
+--- rollout history
+deployment.apps/fulfillops-api 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+4         <none>
+5         <none>
+6         <none>
+7         <none>
+
+--- recent events
+30m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+30m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+30m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+30m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+30m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+30m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-jb7kp    Readiness probe failed: Get "http://10.244.0.34:8080/health/ready": dial tcp 10.244.0.34:8080: connect: connection refused
+30m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+29m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-6sv5j
+29m         Normal    Killing             pod/fulfillops-api-65b555b4bf-6sv5j    Stopping container api
+29m         Normal    ScalingReplicaSet   deployment/fulfillops-api              (combined from similar events): Scaled down replica set fulfillops-api-65b555b4bf from 1 to 0
+51s         Normal    SuccessfulCreate    replicaset/fulfillops-api-6f885676c4   Created pod: fulfillops-api-6f885676c4-vntkk
+51s         Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+51s         Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+51s         Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+51s         Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled up replica set fulfillops-api-6f885676c4 from 0 to 1
+49s         Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+49s         Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+49s         Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+48s         Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: Get "http://10.244.0.35:8080/health/broken": dial tcp 10.244.0.35:8080: connect: connection refused
+3s          Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: HTTP probe failed with statuscode: 404
+--- committed orders (must not drop)
+completed|1
+--- user view
+GET /health/ready -> 200
+
+=================== PHASE: during ===================
+# date:    2026-11-20T18:26:04Z
+# commit:  9994d68605676d2d14650fc147e36c0277ead77a
+# command: scripts/broken-rollout.sh during
+# mode:    kind
+
+origin/main: f24ed77b55415b9a6b24cdda7acef41457395c47  Merge pull request #23 from dodo0005/b/break-readiness
+--- argo
+Synced / Degraded  rev=f24ed77b55415b9a6b24cdda7acef41457395c47
+--- rollout status (5 s timeout)
+error: deployment "fulfillops-api" exceeded its progress deadline
+--- deployment conditions
+Available=True  MinimumReplicasAvailable  Deployment has minimum availability.
+Progressing=False  ProgressDeadlineExceeded  ReplicaSet "fulfillops-api-6f885676c4" has timed out progressing.
+--- replicasets / pods
+NAME                                        DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-65b555b4bf   0         0         0       38m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=65b555b4bf
+replicaset.apps/fulfillops-api-6c668869dc   0         0         0       3h19m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c668869dc
+replicaset.apps/fulfillops-api-6c9f776fcd   2         2         2       34m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c9f776fcd
+replicaset.apps/fulfillops-api-6f885676c4   1         1         0       5m22s   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6f885676c4
+replicaset.apps/fulfillops-api-74d6bdcdd8   0         0         0       47m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=74d6bdcdd8
+replicaset.apps/fulfillops-api-7b74bb9987   0         0         0       87m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=7b74bb9987
+replicaset.apps/fulfillops-api-cbdf8c778    0         0         0       120m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=cbdf8c778
+
+NAME                                  READY   STATUS    RESTARTS   AGE     IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c9f776fcd-bl7fr   1/1     Running   0          34m     10.244.0.33   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c9f776fcd-jb7kp   1/1     Running   0          34m     10.244.0.34   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6f885676c4-vntkk   0/1     Running   0          5m22s   10.244.0.35   fulfillops-control-plane   <none>           <none>
+--- rollout history
+deployment.apps/fulfillops-api 
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+4         <none>
+5         <none>
+6         <none>
+7         <none>
+
+--- recent events
+34m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+34m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+34m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+34m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+34m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+34m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-jb7kp    Readiness probe failed: Get "http://10.244.0.34:8080/health/ready": dial tcp 10.244.0.34:8080: connect: connection refused
+34m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+34m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-6sv5j
+34m         Normal    Killing             pod/fulfillops-api-65b555b4bf-6sv5j    Stopping container api
+34m         Normal    ScalingReplicaSet   deployment/fulfillops-api              (combined from similar events): Scaled down replica set fulfillops-api-65b555b4bf from 1 to 0
+5m22s       Normal    SuccessfulCreate    replicaset/fulfillops-api-6f885676c4   Created pod: fulfillops-api-6f885676c4-vntkk
+5m22s       Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+5m22s       Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+5m22s       Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+5m22s       Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled up replica set fulfillops-api-6f885676c4 from 0 to 1
+5m20s       Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+5m20s       Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+5m20s       Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+5m19s       Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: Get "http://10.244.0.35:8080/health/broken": dial tcp 10.244.0.35:8080: connect: connection refused
+16s         Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: HTTP probe failed with statuscode: 404
+--- committed orders (must not drop)
+completed|1
+--- user view
+GET /health/ready -> 200
+
+=================== PHASE: after ===================
+# date:    2026-11-20T18:29:05Z
+# commit:  1a6499b52f9b82c90b800772bd05e4aa9c8fa8f8
+# command: scripts/broken-rollout.sh after
+# mode:    kind
+
+origin/main: fd4a976c6b721a86831002c79329a127b62399ce  Merge pull request #24 from dodo0005/b/revert-break
+--- argo
+Synced / Healthy  rev=fd4a976c6b721a86831002c79329a127b62399ce
+--- rollout status (5 s timeout)
+deployment "fulfillops-api" successfully rolled out
+--- deployment conditions
+Available=True  MinimumReplicasAvailable  Deployment has minimum availability.
+Progressing=True  NewReplicaSetAvailable  ReplicaSet "fulfillops-api-6c9f776fcd" has successfully progressed.
+--- replicasets / pods
+NAME                                        DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-65b555b4bf   0         0         0       41m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=65b555b4bf
+replicaset.apps/fulfillops-api-6c9f776fcd   2         2         2       37m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c9f776fcd
+replicaset.apps/fulfillops-api-6f885676c4   0         0         0       8m22s   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6f885676c4
+replicaset.apps/fulfillops-api-74d6bdcdd8   0         0         0       50m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=74d6bdcdd8
+replicaset.apps/fulfillops-api-7b74bb9987   0         0         0       90m     api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=7b74bb9987
+replicaset.apps/fulfillops-api-cbdf8c778    0         0         0       123m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=cbdf8c778
+
+NAME                                  READY   STATUS      RESTARTS   AGE     IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c9f776fcd-bl7fr   1/1     Running     0          37m     10.244.0.33   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c9f776fcd-jb7kp   1/1     Running     0          37m     10.244.0.34   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6f885676c4-vntkk   0/1     Completed   0          8m22s   10.244.0.35   fulfillops-control-plane   <none>           <none>
+--- rollout history
+deployment.apps/fulfillops-api 
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+4         <none>
+5         <none>
+7         <none>
+8         <none>
+
+--- recent events
+37m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+37m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+37m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+37m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-jb7kp    Readiness probe failed: Get "http://10.244.0.34:8080/health/ready": dial tcp 10.244.0.34:8080: connect: connection refused
+37m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-6sv5j
+37m         Normal    ScalingReplicaSet   deployment/fulfillops-api              (combined from similar events): Scaled down replica set fulfillops-api-65b555b4bf from 1 to 0
+37m         Normal    Killing             pod/fulfillops-api-65b555b4bf-6sv5j    Stopping container api
+8m22s       Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled up replica set fulfillops-api-6f885676c4 from 0 to 1
+8m22s       Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+8m22s       Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+8m22s       Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+8m22s       Normal    SuccessfulCreate    replicaset/fulfillops-api-6f885676c4   Created pod: fulfillops-api-6f885676c4-vntkk
+8m20s       Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+8m20s       Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+8m20s       Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+8m19s       Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: Get "http://10.244.0.35:8080/health/broken": dial tcp 10.244.0.35:8080: connect: connection refused
+3m16s       Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: HTTP probe failed with statuscode: 404
+6s          Normal    Killing             pod/fulfillops-api-6f885676c4-vntkk    Stopping container api
+6s          Normal    SuccessfulDelete    replicaset/fulfillops-api-6f885676c4   Deleted pod: fulfillops-api-6f885676c4-vntkk
+6s          Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled down replica set fulfillops-api-6f885676c4 from 1 to 0
+--- committed orders (must not drop)
+completed|1
+--- user view
+GET /health/ready -> 200
+
+=================== PHASE: after ===================
+# date:    2026-11-20T18:31:21Z
+# commit:  1a6499b52f9b82c90b800772bd05e4aa9c8fa8f8
+# command: scripts/broken-rollout.sh after
+# mode:    kind
+
+origin/main: fd4a976c6b721a86831002c79329a127b62399ce  Merge pull request #24 from dodo0005/b/revert-break
+--- argo
+Synced / Healthy  rev=fd4a976c6b721a86831002c79329a127b62399ce
+--- rollout status (5 s timeout)
+deployment "fulfillops-api" successfully rolled out
+--- deployment conditions
+Available=True  MinimumReplicasAvailable  Deployment has minimum availability.
+Progressing=True  NewReplicaSetAvailable  ReplicaSet "fulfillops-api-6c9f776fcd" has successfully progressed.
+--- replicasets / pods
+NAME                                        DESIRED   CURRENT   READY   AGE    CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-65b555b4bf   0         0         0       43m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=65b555b4bf
+replicaset.apps/fulfillops-api-6c9f776fcd   2         2         2       39m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c9f776fcd
+replicaset.apps/fulfillops-api-6f885676c4   0         0         0       10m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6f885676c4
+replicaset.apps/fulfillops-api-74d6bdcdd8   0         0         0       52m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=74d6bdcdd8
+replicaset.apps/fulfillops-api-7b74bb9987   0         0         0       92m    api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=7b74bb9987
+replicaset.apps/fulfillops-api-cbdf8c778    0         0         0       126m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=cbdf8c778
+
+NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c9f776fcd-bl7fr   1/1     Running   0          39m   10.244.0.33   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c9f776fcd-jb7kp   1/1     Running   0          39m   10.244.0.34   fulfillops-control-plane   <none>           <none>
+--- rollout history
+deployment.apps/fulfillops-api 
+REVISION  CHANGE-CAUSE
+2         <none>
+3         <none>
+4         <none>
+5         <none>
+7         <none>
+8         <none>
+
+--- recent events
+39m         Normal    Pulled              pod/fulfillops-api-6c9f776fcd-jb7kp    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+39m         Normal    Created             pod/fulfillops-api-6c9f776fcd-jb7kp    Container created
+39m         Normal    Started             pod/fulfillops-api-6c9f776fcd-jb7kp    Container started
+39m         Warning   Unhealthy           pod/fulfillops-api-6c9f776fcd-jb7kp    Readiness probe failed: Get "http://10.244.0.34:8080/health/ready": dial tcp 10.244.0.34:8080: connect: connection refused
+39m         Normal    SuccessfulDelete    replicaset/fulfillops-api-65b555b4bf   Deleted pod: fulfillops-api-65b555b4bf-6sv5j
+39m         Normal    ScalingReplicaSet   deployment/fulfillops-api              (combined from similar events): Scaled down replica set fulfillops-api-65b555b4bf from 1 to 0
+39m         Normal    Killing             pod/fulfillops-api-65b555b4bf-6sv5j    Stopping container api
+10m         Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled up replica set fulfillops-api-6f885676c4 from 0 to 1
+10m         Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+10m         Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+10m         Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+10m         Normal    SuccessfulCreate    replicaset/fulfillops-api-6f885676c4   Created pod: fulfillops-api-6f885676c4-vntkk
+10m         Normal    Created             pod/fulfillops-api-6f885676c4-vntkk    Container created
+10m         Normal    Started             pod/fulfillops-api-6f885676c4-vntkk    Container started
+10m         Normal    Pulled              pod/fulfillops-api-6f885676c4-vntkk    Container image "ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3" already present on machine and can be accessed by the pod
+10m         Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: Get "http://10.244.0.35:8080/health/broken": dial tcp 10.244.0.35:8080: connect: connection refused
+5m32s       Warning   Unhealthy           pod/fulfillops-api-6f885676c4-vntkk    Readiness probe failed: HTTP probe failed with statuscode: 404
+2m22s       Normal    Killing             pod/fulfillops-api-6f885676c4-vntkk    Stopping container api
+2m22s       Normal    SuccessfulDelete    replicaset/fulfillops-api-6f885676c4   Deleted pod: fulfillops-api-6f885676c4-vntkk
+2m22s       Normal    ScalingReplicaSet   deployment/fulfillops-api              Scaled down replica set fulfillops-api-6f885676c4 from 1 to 0
+--- committed orders (must not drop)
+completed|1
+--- user view
+GET /health/ready -> 200
+
