@@ -1,0 +1,49 @@
+# date: 2026-11-20T16:20:54Z  commit: 06d14c66e5af19e17a3df438ea6aaa9d8a5d5c71
+NAME                                     READY   STATUS    RESTARTS   AGE   IP            NODE                       NOMINATED NODE   READINESS GATES
+pod/fulfillops-api-6c668869dc-4fkxw      1/1     Running   0          74m   10.244.0.15   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-api-6c668869dc-7bn4d      1/1     Running   0          74m   10.244.0.16   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-postgres-0                1/1     Running   0          74m   10.244.0.18   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-redis-67686bf885-kbrj2    1/1     Running   0          74m   10.244.0.14   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-worker-788ff7d4c8-6tnh4   1/1     Running   0          74m   10.244.0.12   fulfillops-control-plane   <none>           <none>
+pod/fulfillops-worker-788ff7d4c8-k9jnh   1/1     Running   0          74m   10.244.0.13   fulfillops-control-plane   <none>           <none>
+
+NAME                          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/fulfillops-api        NodePort    10.96.151.208   <none>        8080:30080/TCP   74m   app.kubernetes.io/name=fulfillops-api
+service/fulfillops-postgres   ClusterIP   10.96.117.7     <none>        5432/TCP         74m   app.kubernetes.io/name=fulfillops-postgres
+service/fulfillops-redis      ClusterIP   10.96.181.33    <none>        6379/TCP         74m   app.kubernetes.io/name=fulfillops-redis
+
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                                 SELECTOR
+deployment.apps/fulfillops-api      2/2     2            2           74m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api
+deployment.apps/fulfillops-redis    1/1     1            1           74m   redis        redis:7.4.12-alpine                                                    app.kubernetes.io/name=fulfillops-redis
+deployment.apps/fulfillops-worker   2/2     2            2           74m   worker       ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-worker
+
+NAME                                           DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                                                                 SELECTOR
+replicaset.apps/fulfillops-api-6c668869dc      2         2         2       74m   api          ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-api,pod-template-hash=6c668869dc
+replicaset.apps/fulfillops-redis-67686bf885    1         1         1       74m   redis        redis:7.4.12-alpine                                                    app.kubernetes.io/name=fulfillops-redis,pod-template-hash=67686bf885
+replicaset.apps/fulfillops-worker-788ff7d4c8   2         2         2       74m   worker       ghcr.io/dodo0005/fulfillops:2419a4d05e46fa8222417fe6ff85ae57643457b3   app.kubernetes.io/name=fulfillops-worker,pod-template-hash=788ff7d4c8
+
+NAME                                   READY   AGE   CONTAINERS   IMAGES
+statefulset.apps/fulfillops-postgres   1/1     74m   postgres     postgres:16.15-alpine
+
+NAME                                               STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE   VOLUMEMODE
+persistentvolumeclaim/data-fulfillops-postgres-0   Bound    pvc-3327cfdc-8dfe-4794-9e55-8ee9394d5633   1Gi        RWO            standard       <unset>                 74m   Filesystem
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:     100m
+      memory:  128Mi
+    Environment Variables from:
+--
+    Limits:
+      cpu:     500m
+      memory:  256Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/health/live delay=5s timeout=2s period=10s successThreshold=1 failureThreshold=3
+    Readiness:  http-get http://:http/health/ready delay=0s timeout=2s period=5s successThreshold=1 failureThreshold=2
+    Environment Variables from:
+      fulfillops-config  ConfigMap  Optional: false
+    Environment:
+{"status":"ready"}
