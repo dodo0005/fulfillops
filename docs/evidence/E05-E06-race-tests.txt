@@ -1,0 +1,24 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Documents\devops\Final-lab-1\the_code\fulfillops\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Documents\devops\final-lab-1\the_code\fulfillops
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 2 items
+
+tests/race/test_distinct_key_race.py::test_more_buyers_than_stock_never_oversells PASSED [ 50%]
+tests/race/test_same_key_cross_replica.py::test_same_key_across_replicas_reserves_once PASSED [100%]
+
+============================== 2 passed in 6.60s ==============================
+   sku    | available 
+----------+-----------
+ KIT-100  |         6
+ PACK-300 |         5
+ PART-200 |         0
+(3 rows)
+
+             idempotency_key             | count 
+-----------------------------------------+-------
+ shared-db1bbc8672a44d199f9cd5b876371cc0 |     1
+(1 row)
+
