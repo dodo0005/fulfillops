@@ -35,6 +35,8 @@ spec:
       app.kubernetes.io/name: fulfillops-api
   template:
     metadata:
+      annotations:
+        fulfillops/release: "2"
       labels:
         app.kubernetes.io/name: fulfillops-api
     spec:
