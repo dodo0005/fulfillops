@@ -57,6 +57,9 @@ class BusinessCollector(Collector):
     def __init__(self, pool: ConnectionPool) -> None:
         self._pool = pool
 
+    def describe(self) -> list:
+        return []  # no test read at startup, before the pool is open
+
     def collect(self) -> Iterator[CounterMetricFamily]:
         try:
             with self._pool.connection(timeout=2) as conn:

@@ -1,0 +1,61 @@
+== E12 RED  2026-11-20T15:38:37Z  bug: canonical_hash without sort_keys
+============================= test session starts =============================
+platform win32 -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Documents\devops\Final-lab-1\the_code\fulfillops\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Documents\devops\final-lab-1\the_code\fulfillops
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 39 items / 37 deselected / 2 selected
+
+tests/unit/test_validation.py::test_hash_ignores_key_order FAILED        [ 50%]
+tests/unit/test_validation.py::test_hash_detects_different_payload PASSED [100%]
+
+================================== FAILURES ===================================
+_________________________ test_hash_ignores_key_order _________________________
+
+    def test_hash_ignores_key_order():
+        a = {"customer_id": "C1", "items": [{"sku": "KIT-100", "quantity": 1}]}
+        b = {"items": [{"quantity": 1, "sku": "KIT-100"}], "customer_id": "C1"}
+>       assert canonical_hash(a) == canonical_hash(b)
+E       AssertionError: assert '3044fedf101a...8a4b1913b929c' == '15226afdc558...cea87692ae0f6'
+E         
+E         - 15226afdc558b580ecc34956dfb0ef3abe39c4775841e033850cea87692ae0f6
+E         + 3044fedf101a548611d8bb2efc4440b1f0e711a03a5e1103b6e8a4b1913b929c
+
+tests\unit\test_validation.py:126: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/unit/test_validation.py::test_hash_ignores_key_order - Assertion...
+================= 1 failed, 1 passed, 37 deselected in 0.78s ==================
+============================= test session starts =============================
+platform win32 -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Documents\devops\Final-lab-1\the_code\fulfillops\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Documents\devops\final-lab-1\the_code\fulfillops
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 1 item
+
+tests/integration/test_idempotency_key_order.py::test_reordered_json_keys_replay_same_order FAILED [100%]
+
+================================== FAILURES ===================================
+_________________ test_reordered_json_keys_replay_same_order __________________
+
+client = <httpx.Client object at 0x00000297FBFF7920>
+
+    def test_reordered_json_keys_replay_same_order(client):
+        key = "order-" + uuid.uuid4().hex
+        headers = {"Idempotency-Key": key, "Content-Type": "application/json"}
+        first = json.dumps({"customer_id": "CUST-ORD", "items": [{"sku": "PART-200", "quantity": 1}]})
+        second = json.dumps({"items": [{"quantity": 1, "sku": "PART-200"}], "customer_id": "CUST-ORD"})
+    
+        a = client.post("/api/v1/orders", content=first, headers=headers)
+        b = client.post("/api/v1/orders", content=second, headers=headers)
+        assert a.status_code == 202
+>       assert b.status_code == 202, b.text
+E       AssertionError: {"error":{"code":"IDEMPOTENCY_CONFLICT","message":"Idempotency-Key was used with another payload"}}
+E       assert 409 == 202
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests\integration\test_idempotency_key_order.py:23: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/integration/test_idempotency_key_order.py::test_reordered_json_keys_replay_same_order
+============================== 1 failed in 2.54s ==============================
