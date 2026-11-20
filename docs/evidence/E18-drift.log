@@ -1,0 +1,21 @@
+# date:    2026-11-20T15:59:53Z
+# commit:  bd93cfd9dda48ce46cda28b0830eb10013f127d3
+# command: scripts/drift-demo.sh
+# mode:    kind
+
+[2026-11-20T15:59:53Z] BEFORE
+[2026-11-20T15:59:53Z] argo=Synced/Healthy  spec.replicas=2  ready=2
+[2026-11-20T15:59:53Z] DRIFT: kubectl -n fulfillops scale deploy/fulfillops-api --replicas=5
+deployment.apps/fulfillops-api scaled
+[2026-11-20T15:59:58Z] argo=Synced/Healthy  spec.replicas=2  ready=2
+[2026-11-20T15:59:59Z] REVERTED to 2 by Argo CD
+[2026-11-20T15:59:59Z] AFTER
+[2026-11-20T15:59:59Z] argo=Synced/Healthy  spec.replicas=2  ready=2
+0 69171f722a875f79ee1a32867c81894f7fe3ce95 2026-11-20T15:06:37Z
+1 c45be719dac8472b980c30f209538d527dd6dd51 2026-11-20T15:59:12Z
+--- events (proof of the scale to 5 and back to 2)
+53m         Normal    ScalingReplicaSet       deployment/fulfillops-redis                        Scaled up replica set fulfillops-redis-67686bf885 from 0 to 1
+53m         Normal    ScalingReplicaSet       deployment/fulfillops-worker                       Scaled up replica set fulfillops-worker-788ff7d4c8 from 0 to 2
+53m         Normal    ScalingReplicaSet       deployment/fulfillops-api                          Scaled up replica set fulfillops-api-6c668869dc from 0 to 2
+10s         Normal    ScalingReplicaSet       deployment/fulfillops-api                          Scaled up replica set fulfillops-api-6c668869dc from 2 to 5
+9s          Normal    ScalingReplicaSet       deployment/fulfillops-api                          Scaled down replica set fulfillops-api-6c668869dc from 5 to 2

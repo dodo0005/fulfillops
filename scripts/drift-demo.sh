@@ -19,5 +19,5 @@ status() {
     [ "$(kubectl -n $NS get deploy fulfillops-api -o jsonpath='{.spec.replicas}')" = 2 ] && { log "REVERTED to 2 by Argo CD"; break; }
   done
   log "AFTER"; status
-  kubectl -n argocd get application fulfillops -o jsonpath='{range .status.history[-3:]}{.id}{" "}{.revision}{" "}{.deployedAt}{"\n"}{end}'
+  kubectl -n argocd get application fulfillops -o jsonpath='{range .status.history[*]}{.id}{" "}{.revision}{" "}{.deployedAt}{"\n"}{end}'
 } 2>&1 | tee "$out"
