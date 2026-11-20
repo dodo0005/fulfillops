@@ -1,0 +1,9 @@
+]633;E;{ echo "== E03 readiness  $(date -u +%FT%TZ)"\x3b echo "-- db up:"\x3b curl -si localhost:8080/health/ready | head -1\x3b   docker compose stop db\x3b sleep 3\x3b echo "-- db stopped at $(date -u +%T):"\x3b curl -si localhost:8080/health/live | head -1\x3b curl -si localhost:8080/health/ready | head -1\x3b   docker compose start db\x3b echo "-- db started at $(date -u +%T), waiting for readiness..."\x3b   for i in $(seq 1 60)\x3b do code=$(curl -s -o /dev/null -w '%{http_code}' localhost:8080/health/ready)\x3b [ "$code" = "200" ] && break\x3b sleep 1\x3b done\x3b   echo "-- ready again at $(date -u +%T):"\x3b curl -si localhost:8080/health/ready | head -1\x3b } > docs/evidence/E03-readiness.txt;4293e4a5-f6b0-4e91-a9d3-c8f9500daa53]633;C== E03 readiness  2026-11-20T16:24:31Z
+-- db up:
+HTTP/1.1 200 OK
+-- db stopped at 16:24:35:
+HTTP/1.1 200 OK
+HTTP/1.1 503 Service Unavailable
+-- db started at 16:24:36, waiting for readiness...
+-- ready again at 16:24:43:
+HTTP/1.1 200 OK

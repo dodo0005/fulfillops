@@ -11,13 +11,16 @@
 
 ## Measured result
 
-Fill in from `docs/evidence/E21-p95.txt`:
+Measured on 2026-11-20, commit 06d14c6, fresh Docker Compose stack (API + worker + Postgres on one laptop),
+with `scripts/load-p95.py` against `http://localhost:8080`. Raw samples: `docs/evidence/E21-p95-samples.csv`.
 
-- Date / commit:
-- Samples: (at least 200) — errors:
-- p50: — p95: — p99:
-- Verdict: within / outside target
+| Samples | Errors | p50 | p95 | p99 | Max |
+| --- | --- | --- | --- | --- | --- |
+| 300 | 0 (0.00 %) | 5.9 ms | 24.3 ms | 26.0 ms | 49.8 ms |
 
+**Verdict: within target.** p95 is 24.3 ms against a 300 ms objective, and availability was 100 % (0 of 300
+requests failed, target 99.5 %). The margin is large because the test is read-only and local (see the
+limitations below); a real deployment would need its own measurement before relying on this SLO.
 ## How to reproduce
 
 ```bash

@@ -1,0 +1,22 @@
+== E07 multiline  2026-11-20T16:06:08Z  commit 06d14c6
+============================= test session starts =============================
+platform win32 -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\User\Documents\devops\Final-lab-1\the_code\fulfillops\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\User\Documents\devops\final-lab-1\the_code\fulfillops
+configfile: pyproject.toml
+plugins: anyio-4.16.0
+collecting ... collected 1 item
+
+tests/integration/test_multiline.py::test_duplicate_lines_reserve_and_bill_the_sum PASSED [100%]
+
+============================== 1 passed in 4.67s ==============================
+ total_cents |   sku    | quantity 
+-------------+----------+----------
+         996 | PACK-300 |        4
+(1 row)
+
+   sku    | available 
+----------+-----------
+ PACK-300 |         1
+(1 row)
+
