@@ -1,0 +1,25 @@
+]633;E;{ echo "== E04 public checker on fresh Compose stack  $(date -u +%FT%TZ)  commit $(git rev-parse --short HEAD)"\x3b   echo "-- reset guard refuses non-test env:"\x3b docker compose exec -T -e APP_ENV=lab api python -m common.reset_test_data\x3b echo "exit code: $?"\x3b   echo "-- reset on test env:"\x3b docker compose exec -T api python -m common.reset_test_data\x3b   echo "-- checker:"\x3b uv run python tests/contract/fulfillops_public_checker.py --base-url http://localhost:8080 --concurrency --stress\x3b } > docs/evidence/E04-checker-compose.txt 2>&1;4293e4a5-f6b0-4e91-a9d3-c8f9500daa53]633;C== E04 public checker on fresh Compose stack  2026-11-20T16:19:57Z  commit 06d14c6
+-- reset guard refuses non-test env:
+{"ts": "2026-11-20T16:19:57.534641+00:00", "level": "ERROR", "service": "reset", "event": "reset_refused", "reason": "refusing to reset: APP_ENV must be 'test' and the database name must contain 'test' (got APP_ENV='lab', database='fulfillops_test')"}
+exit code: 2
+-- reset on test env:
+{"ts": "2026-11-20T16:19:58.606020+00:00", "level": "INFO", "service": "reset", "event": "reset_done", "stock": {"KIT-100": 7, "PART-200": 12, "PACK-300": 5}}
+-- checker:
+WARNING: test orders consume stock. Run on an isolated TEST deployment; never production.
+PASS Liveness endpoint
+PASS Readiness endpoint
+PASS Catalog and fixed prices
+PASS Unknown order returns 404
+PASS Missing Idempotency-Key returns 400
+PASS Invalid item quantity returns 422
+PASS Inventory reading
+PASS Create order and idempotent retry
+PASS Conflicting idempotency payload rejected
+PASS Asynchronous worker eventually completes
+PASS Inventory reduced exactly once
+PASS Prometheus metrics exposed
+PASS Concurrent inventory reservations are atomic
+PASS Eight concurrent identical-key requests reserve once
+PASS Duplicate SKU lines aggregate and bill correctly
+
+RESULT: 15 passed / 0 failed / 0 skipped

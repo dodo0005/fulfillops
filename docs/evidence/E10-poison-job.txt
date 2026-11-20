@@ -1,0 +1,35 @@
+== E10 poison job drill  2026-11-20T16:07:31Z  commit 06d14c6
+-- inventory before
+KIT-100|7
+PACK-300|5
+PART-200|12
+-- POST response: {"order_id":"42df7c0f-571a-47bd-8830-2eced32fbeb1","status":"queued"}
+-- polling order status (max 120 s)
+16:07:32 status=queued
+16:07:34 status=queued
+16:07:35 status=queued
+16:07:36 status=queued
+16:07:38 status=queued
+16:07:39 status=queued
+16:07:41 status=queued
+16:07:42 status=queued
+16:07:43 status=queued
+16:07:45 status=queued
+16:07:46 status=queued
+16:07:47 status=queued
+16:07:49 status=queued
+16:07:50 status=queued
+16:07:51 status=queued
+16:07:53 status=queued
+16:07:54 status=queued
+16:07:56 status=failed
+-- job row (dead-letter state)
+dead|5|5|poison test order (POISON_TEST_MODE)
+-- waiting 60 s to prove there are no more retries
+dead|5
+-- inventory after (PACK-300 stays reserved: no automatic restock)
+KIT-100|7
+PACK-300|4
+PART-200|12
+-- operator review query
+42df7c0f-571a-47bd-8830-2eced32fbeb1|5|poison test order (POISON_TEST_MODE)
