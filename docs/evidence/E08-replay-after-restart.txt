@@ -1,0 +1,8 @@
+== E08 replay after restart  2026-11-20T14:39:38Z  commit 9d52c65
+-- stock before: {"sku":"PART-200","available":12}
+-- first POST:   {"order_id":"77984f8c-7a67-4bfc-8221-fd3686a57125","status":"queued"}
+-- stock after first POST: {"sku":"PART-200","available":11}
+-- waiting for readiness
+-- API ready again at 14:40:03
+-- replay POST (same key, same body): {"order_id":"77984f8c-7a67-4bfc-8221-fd3686a57125","status":"queued"}
+-- stock after replay (must equal 'after first POST'): {"sku":"PART-200","available":11}
