@@ -55,7 +55,28 @@ Deploy a new version: CI `publish` pushes `ghcr.io/dodo0005/fulfillops:<sha>` �
 ## Individual notes
 
 ### Person A
-TODO
+### Person A
+
+**What I built.** The application lane: the database schema and migrations (`db/migrations`,
+`common/migrate.py`), the API (`api/`) with validation, the error format and the atomic
+reservation and idempotency transaction in `api/orders_service.py`, the worker (`worker/`) with
+lease-based job claims, retries with exponential backoff, dead-lettering and the poison-job mode,
+the `/metrics` endpoint with business totals read from Postgres, and the test-only reset. I wrote
+the unit, integration and race tests (`tests/`), the restart-replay and poison-job scripts, the
+p95 load script and `docs/slo.md`, and produced evidence E03–E08, E10–E12 and E21. I used an AI
+assistant throughout; every use is listed in `docs/assistance-log.md`.
+
+**What I reviewed and fixed in my partner's lane.** I reviewed the Compose, CI and Kubernetes
+PRs. Two fixes came out of running my code through the pipeline: the integration job selected
+zero tests because of the pytest marker filter (fixed with `-m "integration or race"`), and the
+reset step ran outside the containers (now `docker compose exec -T api ...`). When Trivy blocked
+the image on CVE-2026-85091 (zlib), I traced it to the Debian base image and added the
+`apt-get upgrade` to the runtime stage.
+
+**What I would improve next.** Implement the Redis wake-up signal (deferred: workers poll
+Postgres every 2 s), protect `/metrics` instead of exposing it openly, add an operator action to
+release stock held by failed orders, measure `POST /orders` latency and not only reads, and add
+a Compose healthcheck on the worker's metrics port.
 
 ### Person B
 TODO: what I implemented, what I reviewed, what I would improve next.
