@@ -16,6 +16,7 @@ from common.config import Settings, load_settings
 from common.db import create_pool
 from common.logging import configure_logging, log_event
 from worker.claims import claim_next_job
+from worker.metrics import start_metrics_server
 from worker.processor import process_job
 
 
@@ -47,6 +48,7 @@ def main() -> int:
     signal.signal(signal.SIGTERM, _stop)
     signal.signal(signal.SIGINT, _stop)
 
+    start_metrics_server(settings.worker_metrics_port)
     pool = create_pool(settings, min_size=1, max_size=2)
     pool.open(wait=False)
     log_event(

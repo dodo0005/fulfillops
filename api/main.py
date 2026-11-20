@@ -8,6 +8,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from api.errors import install_error_handlers
+from api.metrics import install_business_collector
+from api.metrics import router as metrics_router
+from api.middleware import request_metrics
 from api.routes_catalog import router as catalog_router
 from api.routes_health import router as health_router
 from api.routes_orders import router as orders_router
@@ -40,9 +43,12 @@ def create_app() -> FastAPI:
     app.state.settings = settings
     app.state.pool = pool
     install_error_handlers(app)
+    install_business_collector(pool)
+    app.middleware("http")(request_metrics)
     app.include_router(health_router)
     app.include_router(catalog_router)
     app.include_router(orders_router)
+    app.include_router(metrics_router)
     return app
 
 

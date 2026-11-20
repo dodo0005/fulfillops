@@ -12,6 +12,7 @@ from psycopg_pool import ConnectionPool
 from common.config import Settings
 from common.logging import log_event
 from worker.claims import Job
+from worker.metrics import JOBS_COMPLETED, JOBS_DEAD, JOBS_RECLAIMED, JOBS_RETRIED
 
 POISON_CUSTOMER_ID = "POISON-TEST"
 
@@ -130,6 +131,8 @@ def process_job(pool: ConnectionPool, job: Job, settings: Settings) -> None:
     worker_id = settings.worker_id
     ids = {"order_id": str(job.order_id), "job_id": str(job.job_id), "attempt": job.attempts}
     log_event("job_reclaimed" if job.reclaimed else "job_claimed", worker_id=worker_id, **ids)
+    if job.reclaimed:
+        JOBS_RECLAIMED.labels(worker_id).inc()
     try:
         if job.attempts > job.max_attempts:
             raise ProcessingError("lease expired during the final attempt")
@@ -141,6 +144,7 @@ def process_job(pool: ConnectionPool, job: Job, settings: Settings) -> None:
         with pool.connection() as conn, conn.transaction():
             finished = complete_order(conn, job, worker_id)
         if finished:
+            JOBS_COMPLETED.labels(worker_id).inc()
             log_event("order_completed", worker_id=worker_id, **ids)
         else:
             log_event("job_lease_lost", level="warning", worker_id=worker_id, **ids)
@@ -159,6 +163,7 @@ def process_job(pool: ConnectionPool, job: Job, settings: Settings) -> None:
                 **ids,
             )
             return
+        (JOBS_DEAD if outcome == "dead" else JOBS_RETRIED).labels(worker_id).inc()
         event = "job_dead" if outcome == "dead" else "job_retry_scheduled"
         log_event(
             event,
