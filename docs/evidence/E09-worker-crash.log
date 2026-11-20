@@ -1,0 +1,22 @@
+# date:    2026-11-20T18:49:06Z
+# commit:  986cb33f77fb26d39b66a240622699864d0d0e17
+# command: MODE=compose scripts/fault-kill-worker.sh
+# mode:    compose
+
+[2026-11-20T18:49:06Z] STEP 1 create a committed order
+202 {"order_id":"9bb3915f-19fa-4716-ba83-fd9160e4bd03","status":"queued"}
+[2026-11-20T18:49:06Z] STEP 2 wait until a worker is processing it
+[2026-11-20T18:49:07Z] order 9bb3915f-19fa-4716-ba83-fd9160e4bd03 is processing
+processing|1|f431b1277aee|2026-11-20 18:49:27.275452+00
+[2026-11-20T18:49:07Z] worker holding the job: f431b1277aee
+[2026-11-20T18:49:07Z] STEP 3 hard kill (SIGKILL, no graceful shutdown)
+f431b1277aee8d8125207d0665c3eefdf167056b2b89d01916c75dde0680cd41
+[2026-11-20T18:49:08Z] killed container f431b1277aee8d8125207d0665c3eefdf167056b2b89d01916c75dde0680cd41
+[2026-11-20T18:49:08Z] STEP 4 lease expires, the other worker reclaims and completes
+[2026-11-20T18:49:35Z] order 9bb3915f-19fa-4716-ba83-fd9160e4bd03 is completed
+[2026-11-20T18:49:35Z] STEP 5 proof
+receipts rows (must be 1): 1
+job (expect done, attempts=2, other worker):
+done|2|
+--- job_reclaimed log line
+worker-2  | {"ts": "2026-11-20T18:49:27.878868+00:00", "level": "INFO", "service": "worker", "event": "job_reclaimed", "worker_id": "44867a547446", "order_id": "9bb3915f-19fa-4716-ba83-fd9160e4bd03", "job_id": "fd67c491-b047-472c-99ad-6b190b515aa6", "attempt": 2}

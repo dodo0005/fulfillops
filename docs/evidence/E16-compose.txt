@@ -1,0 +1,96 @@
+# date: 2026-11-20T18:50:21Z  commit: 986cb33f77fb26d39b66a240622699864d0d0e17
+NAME                  IMAGE                   COMMAND                  SERVICE   CREATED              STATUS                        PORTS
+fulfillops-api-1      fulfillops:dev          "uvicorn api.main:ap…"   api       About a minute ago   Up About a minute (healthy)   0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp
+fulfillops-api2-1     fulfillops:dev          "uvicorn api.main:ap…"   api2      About a minute ago   Up About a minute (healthy)   0.0.0.0:8081->8080/tcp, [::]:8081->8080/tcp
+fulfillops-db-1       postgres:16.15-alpine   "docker-entrypoint.s…"   db        About a minute ago   Up About a minute (healthy)   5432/tcp
+fulfillops-redis-1    redis:7.4.12-alpine     "docker-entrypoint.s…"   redis     About a minute ago   Up About a minute (healthy)   6379/tcp
+fulfillops-worker-1   fulfillops:dev          "python -m worker.ma…"   worker    49 seconds ago       Up 46 seconds                 8080/tcp
+fulfillops-worker-2   fulfillops:dev          "python -m worker.ma…"   worker    49 seconds ago       Up 46 seconds                 8080/tcp
+uid=10001(app) gid=10001(app) groups=10001(app)
+IMAGE              ID             DISK USAGE   CONTENT SIZE   EXTRA
+fulfillops:dev     06300d6b4979        273MB         63.9MB   U    
+fulfillops:naive   ea157328b90e       1.74GB          453MB        
+ Container fulfillops-api-1 Stopping 
+ Container fulfillops-api2-1 Stopping 
+ Container fulfillops-worker-2 Stopping 
+ Container fulfillops-worker-1 Stopping 
+ Container fulfillops-worker-2 Stopped 
+ Container fulfillops-worker-2 Removing 
+ Container fulfillops-worker-1 Stopped 
+ Container fulfillops-worker-1 Removing 
+ Container fulfillops-worker-2 Removed 
+ Container fulfillops-worker-1 Removed 
+ Container fulfillops-api-1 Stopped 
+ Container fulfillops-api-1 Removing 
+ Container fulfillops-api-1 Removed 
+ Container fulfillops-api2-1 Stopped 
+ Container fulfillops-api2-1 Removing 
+ Container fulfillops-api2-1 Removed 
+ Container fulfillops-redis-1 Stopping 
+ Container fulfillops-migrate-1 Stopping 
+ Container fulfillops-migrate-1 Stopped 
+ Container fulfillops-migrate-1 Removing 
+ Container fulfillops-migrate-1 Removed 
+ Container fulfillops-db-1 Stopping 
+ Container fulfillops-redis-1 Stopped 
+ Container fulfillops-redis-1 Removing 
+ Container fulfillops-db-1 Stopped 
+ Container fulfillops-db-1 Removing 
+ Container fulfillops-redis-1 Removed 
+ Container fulfillops-db-1 Removed 
+ Network fulfillops_default Removing 
+ Network fulfillops_default Removed 
+ Network fulfillops_default Creating 
+ Network fulfillops_default Creating 
+ Network fulfillops_default Created 
+ Network fulfillops_default Created 
+ Container fulfillops-redis-1 Creating 
+ Container fulfillops-db-1 Creating 
+ Container fulfillops-db-1 Created 
+ Container fulfillops-migrate-1 Creating 
+ Container fulfillops-redis-1 Created 
+ Container fulfillops-migrate-1 Created 
+ Container fulfillops-worker-2 Creating 
+ Container fulfillops-worker-1 Creating 
+ Container fulfillops-api2-1 Creating 
+ Container fulfillops-api-1 Creating 
+ Container fulfillops-api2-1 Created 
+ Container fulfillops-worker-2 Created 
+ Container fulfillops-worker-1 Created 
+ Container fulfillops-api-1 Created 
+ Container fulfillops-db-1 Starting 
+ Container fulfillops-redis-1 Starting 
+ Container fulfillops-db-1 Started 
+ Container fulfillops-db-1 Waiting 
+ Container fulfillops-redis-1 Started 
+ Container fulfillops-redis-1 Waiting 
+ Container fulfillops-db-1 Healthy 
+ Container fulfillops-migrate-1 Starting 
+ Container fulfillops-redis-1 Healthy 
+ Container fulfillops-migrate-1 Started 
+ Container fulfillops-migrate-1 Waiting 
+ Container fulfillops-migrate-1 Exited 
+ Container fulfillops-worker-1 Starting 
+ Container fulfillops-api-1 Starting 
+ Container fulfillops-api2-1 Starting 
+ Container fulfillops-worker-1 Started 
+ Container fulfillops-worker-2 Starting 
+ Container fulfillops-api-1 Started 
+ Container fulfillops-api2-1 Started 
+ Container fulfillops-worker-2 Started 
+ Container fulfillops-migrate-1 Waiting 
+ Container fulfillops-api-1 Waiting 
+ Container fulfillops-api2-1 Waiting 
+ Container fulfillops-worker-1 Waiting 
+ Container fulfillops-worker-2 Waiting 
+ Container fulfillops-db-1 Waiting 
+ Container fulfillops-redis-1 Waiting 
+ Container fulfillops-migrate-1 Exited 
+ Container fulfillops-db-1 Healthy 
+ Container fulfillops-worker-1 Healthy 
+ Container fulfillops-worker-2 Healthy 
+ Container fulfillops-redis-1 Healthy 
+ Container fulfillops-api-1 Healthy 
+ Container fulfillops-api2-1 Healthy 
+--- order from E09 after full restart:
+{"order_id":"9bb3915f-19fa-4716-ba83-fd9160e4bd03","status":"completed","total_cents":599}
