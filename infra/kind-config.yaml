@@ -1,0 +1,15 @@
+# kind create cluster --name fulfillops --config infra/kind-config.yaml
+# NodePort 30080 (fulfillops-api Service) is published on host 8080, so
+# http://localhost:8080 reaches BOTH API pods and survives rollouts (a
+# port-forward pins one pod and dies when it is replaced).
+# Host 8080 is also used by Compose: stop one stack before starting the other.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: fulfillops
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30080
+        hostPort: 8080
+        listenAddress: "127.0.0.1"
+        protocol: TCP

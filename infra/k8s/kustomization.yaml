@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: fulfillops
+resources:
+  - namespace.yaml
+  - serviceaccount.yaml
+  - configmap.yaml
+  - postgres.yaml
+  - redis.yaml
+  - api.yaml
+  - worker.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: fulfillops
+    includeSelectors: false
+# Promotion = a PR that changes newTag to a full commit SHA that `publish` pushed.
+images:
+  - name: fulfillops
+    newName: ghcr.io/dodo0005/fulfillops
+    newTag: 2419a4d05e46fa8222417fe6ff85ae57643457b3
