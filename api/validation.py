@@ -41,7 +41,7 @@ def validate_idempotency_key(value: str | None) -> str:
 
 def canonical_hash(body: dict) -> str:
     """Same payload with keys in a different order -> same hash."""
-    canonical = json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    canonical = json.dumps(body, separators=(",", ":"), ensure_ascii=False)
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
