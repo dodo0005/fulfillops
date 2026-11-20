@@ -1,0 +1,22 @@
+# Bootstrap once: kubectl apply -f infra/argocd/application.yaml
+# After that, Git (main, infra/k8s) is the source of truth.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fulfillops
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dodo0005/fulfillops.git
+    targetRevision: main
+    path: infra/k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: fulfillops
+  syncPolicy:
+    automated:
+      prune: true      # objects deleted from Git are deleted from the cluster (except Postgres: Prune=false)
+      selfHeal: true   # manual drift (e.g. kubectl scale) is reverted to Git
+    syncOptions:
+      - CreateNamespace=true

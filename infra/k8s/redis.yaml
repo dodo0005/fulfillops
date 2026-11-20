@@ -1,0 +1,73 @@
+# Redis is only a wake-up signal; Postgres is the source of truth. No persistence needed.
+apiVersion: v1
+kind: Service
+metadata:
+  name: fulfillops-redis
+  labels:
+    app.kubernetes.io/name: fulfillops-redis
+spec:
+  selector:
+    app.kubernetes.io/name: fulfillops-redis
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fulfillops-redis
+  labels:
+    app.kubernetes.io/name: fulfillops-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fulfillops-redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fulfillops-redis
+    spec:
+      serviceAccountName: fulfillops
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999       # redis user in the alpine image
+        runAsGroup: 999
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: redis
+          image: redis:7.4.12-alpine
+          args: ["--save", "", "--appendonly", "no"]
+          ports:
+            - name: redis
+              containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          emptyDir: {}
