@@ -33,3 +33,7 @@ PACK-300|4
 PART-200|12
 -- operator review query
 42df7c0f-571a-47bd-8830-2eced32fbeb1|5|poison test order (POISON_TEST_MODE)
+
+
+{"ts": "2026-11-20T16:07:45.549818+00:00", "level": "INFO", "service": "worker", "event": "job_claimed", "worker_id": "Mahmoud-Nasser", "order_id": "42df7c0f-571a-47bd-8830-2eced32fbeb1", "job_id": "df02238c-a550-4354-83b8-de4311711b24", "attempt": 4}
+{"ts": "2026-11-20T16:07:45.561747+00:00", "level": "WARNING", "service": "worker", "event": "job_retry_scheduled", "worker_id": "Mahmoud-Nasser", "error": "poison test order (POISON_TEST_MODE)", "next": "retry in 8.8s", "order_id": "42df7c0f-571a-47bd-8830-2eced32fbeb1", "job_id": "df02238c-a550-4354-83b8-de4311711b24", "attempt": 4}
